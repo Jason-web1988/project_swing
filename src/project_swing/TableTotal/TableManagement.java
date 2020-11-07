@@ -1,0 +1,69 @@
+package project_swing.TableTotal;
+
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import project_swing.menuTable.dao.Impl.service.TableInfoService;
+import project_swing.menuTable.dao.Impl.ui.content.FramePos;
+import project_swing.menuTable.dto.TableInfo;
+
+public class TableManagement extends JPanel {
+	private int res;
+	private TableInfoService service;
+	
+	private HashMap<Integer, FramePos> map = new HashMap<>();
+	private List<TableInfo> list;
+	
+	public TableManagement() {
+		service = new TableInfoService();
+		list = service.selectTableInfoAll();
+		
+		initComponents();
+	}
+
+	private void initComponents() {
+		setBorder(new EmptyBorder(50, 30, 50, 30));
+		setLayout(new GridLayout(0, 2, 30, 20));
+
+		
+		for(int i = 0; i < list.size(); i++) {
+			TableInfo t = list.get(i);
+			TableStructure pTable = new TableStructure(t);
+			add(pTable);
+			pTable.addMouseListener(addMouseAction());
+			
+		}
+		
+	}
+
+	private MouseAdapter addMouseAction() {
+		return new MouseAdapter() {
+
+//			private FramePos framePos;
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.out.println(e);
+				TableStructure s = (TableStructure)e.getSource();
+				System.out.println(s.gettInfo());
+				FramePos framePos = new FramePos(s.gettInfo());
+				framePos.setTitle(s.gettInfo()+"");
+//				if (framePos == null) {
+//					framePos = new FramePos();
+//				}
+				
+				framePos.setVisible(true);
+			}
+			
+			
+
+		};
+	}
+	
+}
